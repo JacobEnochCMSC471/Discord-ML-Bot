@@ -1,17 +1,26 @@
 import preprocess  # Stores all pre-processing code for user strings
 import discord
+import os
 from transformers import AutoModel, AutoTokenizer
 import keras
 import numpy as np
 
 # Creating client instance - this will be used to interact with the Discord API (connection to Discord)
-intents = discord.Intents.all()
+# intents = discord.Intents.all()
+
+token = os.getenv("DISCORD_TOKEN")
+# Saw the command below in the Discord API Man Pages. Manpages said to use default intents.
+intents = discord.Intents.default()
 client = discord.Client(intents=intents)
-secret_key = ''
+# secret_key = ''
+
+# my_guild = os.getenv("DISCORD_GUILD")
+
 
 BERT_tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 BERT_model = AutoModel.from_pretrained('bert-base-uncased')
 
+# Loads the 2D CNN model saved as an hdf5 file.
 moderation_model = keras.models.load_model('80pct_recall_conv2d.h5')
 
 # The on_ready event happens when the bot comes online
@@ -23,11 +32,11 @@ async def on_ready():
 
 # The on_message event happens when a message gets sent on the server
 @client.event
-async def on_message(msg):
+async def on_message(message):
     # Only classify the message if it is not sent by the bot
-    if msg.author != client.user:
+    if message.author != client.user:
 
-        user_string = msg.content
+        user_string = message.content
 
         model_list = []
 
@@ -42,9 +51,13 @@ async def on_message(msg):
 
         model_list = np.array(model_list)
 
-        model_prediction = moderation_model.predict(model_list)
+        model_prediction = moderation_model.predict(model_list)[0][0]
 
+        # print(model_prediction)
         print(model_prediction)
+        # Code to send messages. We'll be using this function to have our bot send a message flagging somehting as toxic.
+        await message.channel.send(model_prediction)
 
 
-client.run(secret_key)  # Running the bot
+# client.run(secret_key)  # Running the bot
+client.run(token)
