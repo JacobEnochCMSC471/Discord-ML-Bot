@@ -14,6 +14,8 @@ Our paper `CMSC_473_Discord_Moderation_Bot_John_Enoch.pdf` and the Jupyter Noteb
 
 Enter `pip install -r requirements.txt` in the terminal/console to install the necessary dependencies to run the notebook.
 
+All required files are sitting in the same directory as the Notebook file - there should be no issues with loading in pre-existing files. 
+
 It should be noted that this notebook was primarily ran and tested using Colab - [link to original Colab notebook can be found here](https://colab.research.google.com/drive/1LFFE5-HH5Lw_gFClVcy7YSQMmaOqlz7D?authuser=1). Simply upload the required files (common_contractions.txt, train/dev/test embeddings CSV files, as well as any trained models that will be loaded in) to the runtime and run the Notebook as normal. All dependencies will be installed for the current Colab session. We did test it on a Linux distribution as well - the Colab link is provided in case issues arise with local machines. We also recommend running the Notebook on Colab because of the high RAM requirements. A standard, free Colab session is able to run data pre-processing and model training/evaluation without any RAM overloading. 
 
 One final note - we recommend not letting the Embeddings section of the model code run fully. Each data set takes approximately 45-50 minutes to generate embeddings for. These were generated and saved in the provided embedding CSV files. The files that will be created when Embeddings section is ran are different from the provided to prevent the provided embeddings from getting over-written or appended to (i.e. new embeddings are written to train_embeddings_NEW.csv instead of the provided train_embeddings.csv).
